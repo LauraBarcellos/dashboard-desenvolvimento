@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WorkItem {
+  id          Int      @id @default(autoincrement())
+  externalId  String   @unique
+  title       String
+  type        String
+  status      String
+  project     String
+  createdAt   DateTime @default(now())
+  activatedAt DateTime?
+  closedAt    DateTime?
+}
