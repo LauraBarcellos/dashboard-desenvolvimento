@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependências
 node_modules
 dist
 dist-ssr
@@ -22,3 +23,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- Configurações do Projeto (Server/Prisma) ---
+# Ignora o banco de dados local e arquivos temporários do SQLite
+server/prisma/dev.db
+server/prisma/dev.db-journal
+
+# Ignora variáveis de ambiente (segurança)
+.env
+server/.env
+
+# Limpeza de resquícios da arquitetura antiga
+/generated/prisma

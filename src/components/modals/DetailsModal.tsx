@@ -3,12 +3,18 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { DataTable } from '@/components/data/DataTable';
-import { WorkItem } from '@/types/metrics';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { WorkItem } from "@/types/metrics";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface DetailsModalProps {
   open: boolean;
@@ -17,64 +23,44 @@ interface DetailsModalProps {
   items: WorkItem[];
 }
 
-const typeLabels: Record<string, string> = {
-  feature: 'Feature',
-  bug: 'Bug',
-  task: 'Task',
-  improvement: 'Melhoria',
-};
-
-const statusLabels: Record<string, string> = {
-  backlog: 'Backlog',
-  active: 'Ativo',
-  resolved: 'Resolvido',
-  closed: 'Fechado',
-};
-
-const formatDate = (date: string | null) => {
-  if (!date) return '-';
-  return format(new Date(date), 'dd/MM/yyyy', { locale: ptBR });
+const formatDate = (dateString: string | undefined): string => {
+  if (!dateString) return "-";
+  try {
+    return format(new Date(dateString), "dd/MM/yyyy", { locale: ptBR });
+  } catch {
+    return "-";
+  }
 };
 
 export const DetailsModal = ({ open, onClose, title, items }: DetailsModalProps) => {
-  const columns = [
-    { key: 'id', header: 'ID' },
-    { key: 'title', header: 'Título' },
-    {
-      key: 'type',
-      header: 'Tipo',
-      render: (item: WorkItem) => (
-        <Badge variant="secondary">{typeLabels[item.type]}</Badge>
-      ),
-    },
-    { key: 'project', header: 'Projeto' },
-    {
-      key: 'status',
-      header: 'Status',
-      render: (item: WorkItem) => statusLabels[item.status],
-    },
-    {
-      key: 'createdDate',
-      header: 'Criado',
-      render: (item: WorkItem) => formatDate(item.createdDate),
-    },
-    {
-      key: 'closedDate',
-      header: 'Fechado',
-      render: (item: WorkItem) => formatDate(item.closedDate),
-    },
-  ];
-
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-4xl">
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-muted-foreground mb-4">
-          {items.length} {items.length === 1 ? 'item' : 'itens'}
-        </p>
-        <DataTable data={items} columns={columns} maxHeight="500px" />
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>Título</TableHead>
+              <TableHead>Tipo</TableHead>
+              <TableHead>Início</TableHead>
+              <TableHead>Conclusão</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell className="font-mono text-xs">{item.id}</TableCell>
+                <TableCell className="max-w-[300px] truncate">{item.title}</TableCell>
+                <TableCell className="capitalize">{item.type}</TableCell>
+                <TableCell>{formatDate(item.startDate)}</TableCell>
+                <TableCell>{formatDate(item.endDate)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </DialogContent>
     </Dialog>
   );

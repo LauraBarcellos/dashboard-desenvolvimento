@@ -1,38 +1,51 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { MetricsOverview } from '@/components/business/MetricsOverview';
 import { ChartsSection } from '@/components/business/ChartsSection';
 import { FiltersPanel } from '@/components/filters/FiltersPanel';
 import { DetailsModal } from '@/components/modals/DetailsModal';
 import { useMetrics } from '@/hooks/useMetrics';
-import { WorkItem } from '@/types/metrics';
 
-type ModalType = 'leadTime' | 'cycleTime' | 'throughput' | 'aging' | null;
+export type ModalType = 'leadTime' | 'cycleTime' | 'throughput' | 'aging';
 
-const modalTitles: Record<string, string> = {
-  leadTime: 'Itens - Lead Time',
-  cycleTime: 'Itens - Cycle Time',
-  throughput: 'Itens - Throughput',
-  aging: 'Itens - Aging (Em Andamento)',
+const MODAL_CONFIG: Record<ModalType, { title: string }> = {
+  leadTime: { title: 'Itens - Lead Time' },
+  cycleTime: { title: 'Itens - Cycle Time' },
+  throughput: { title: 'Itens - Throughput' },
+  aging: { title: 'Itens - Aging (Em Andamento)' },
 };
 
 export const DashboardPage = () => {
-  const { metrics, filters, updateFilter, clearFilters } = useMetrics();
-  const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const { metrics, filters, updateFilter, clearFilters, isLoading } = useMetrics();
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
 
-  const handleCardClick = (metric: string) => {
-    setActiveModal(metric as ModalType);
-  };
+  const handleCardClick = useCallback((metric: ModalType) => {
+    setActiveModal(metric);
+  }, []);
 
-  const getModalItems = (): WorkItem[] => {
-    if (!activeModal) return [];
-    return metrics[activeModal]?.items || [];
-  };
+  const handleCloseModal = useCallback(() => {
+    setActiveModal(null);
+  }, []);
+
+  const modalItems = useMemo(() => {
+    if (!activeModal || !metrics) return [];
+    return metrics[activeModal]?.items ?? [];
+  }, [activeModal, metrics]);
+
+  if (isLoading || !metrics) {
+    return (
+      <DashboardLayout>
+        <div className="flex h-[80vh] items-center justify-center font-mono text-sm">
+          Carregando métricas...
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        <div className="space-y-4">
+        <header className="space-y-4">
           <h2 className="text-2xl font-bold tracking-tight">Visão Geral</h2>
           <FiltersPanel
             filters={filters}
@@ -41,28 +54,30 @@ export const DashboardPage = () => {
             onFilterChange={updateFilter}
             onClear={clearFilters}
           />
-        </div>
+        </header>
 
-        <MetricsOverview
-          leadTime={metrics.leadTime}
-          cycleTime={metrics.cycleTime}
-          throughput={metrics.throughput}
-          aging={metrics.aging}
-          onCardClick={handleCardClick}
-        />
+        <main className="space-y-8">
+          <MetricsOverview
+            leadTime={metrics.leadTime}
+            cycleTime={metrics.cycleTime}
+            throughput={metrics.throughput}
+            aging={metrics.aging}
+            onCardClick={handleCardClick}
+          />
 
-        <ChartsSection
-          throughputTrend={metrics.throughputTrend}
-          cycleTimeTrend={metrics.cycleTimeTrend}
-          distributionByType={metrics.distributionByType}
-        />
+          <ChartsSection
+            throughputTrend={metrics.throughputTrend}
+            cycleTimeTrend={metrics.cycleTimeTrend}
+            distributionByType={metrics.distributionByType}
+          />
+        </main>
       </div>
 
       <DetailsModal
         open={activeModal !== null}
-        onClose={() => setActiveModal(null)}
-        title={activeModal ? modalTitles[activeModal] : ''}
-        items={getModalItems()}
+        onClose={handleCloseModal}
+        title={activeModal ? MODAL_CONFIG[activeModal].title : ''}
+        items={modalItems}
       />
     </DashboardLayout>
   );

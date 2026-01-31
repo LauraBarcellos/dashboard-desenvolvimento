@@ -1,13 +1,18 @@
 export interface WorkItem {
   id: string;
   title: string;
-  type: 'feature' | 'bug' | 'task' | 'improvement';
+  status: string;
+  type: string;
   project: string;
-  status: 'backlog' | 'active' | 'resolved' | 'closed';
-  createdDate: string;
-  activatedDate: string | null;
-  resolvedDate: string | null;
-  closedDate: string | null;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface MetricData {
+  value: string | number;
+  unit: string;
+  trend?: number;
+  items: WorkItem[];
 }
 
 export interface Filters {
@@ -18,36 +23,25 @@ export interface Filters {
   status: string | null;
 }
 
-export interface MetricData {
+export interface ChartDataPoint {
+  period: string;
   value: number;
-  unit: string;
-  items: WorkItem[];
 }
 
-export interface DistributionItem {
+export interface TypeDistribution {
   name: string;
   value: number;
   color: string;
 }
 
-export interface ThroughputDataPoint {
-  period: string;
-  count: number;
-}
-
-export interface CycleTimeDataPoint {
-  period: string;
-  value: number;
-}
-
-export interface MetricsState {
+export interface DashboardMetrics {
   leadTime: MetricData;
   cycleTime: MetricData;
   throughput: MetricData;
   aging: MetricData;
-  distributionByType: DistributionItem[];
-  throughputTrend: ThroughputDataPoint[];
-  cycleTimeTrend: CycleTimeDataPoint[];
+  throughputTrend: ChartDataPoint[];
+  cycleTimeTrend: ChartDataPoint[];
+  distributionByType: TypeDistribution[];
   projects: string[];
   types: string[];
 }

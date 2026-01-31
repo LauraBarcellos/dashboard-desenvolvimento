@@ -1,5 +1,5 @@
-import { Clock, Zap, TrendingUp, AlertCircle } from 'lucide-react';
-import { MetricCard } from '@/components/metrics/MetricCard';
+import { ModalType } from '@/pages/DashboardPage';
+import { MetricCard } from './MetricCard';
 import { MetricData } from '@/types/metrics';
 
 interface MetricsOverviewProps {
@@ -7,7 +7,7 @@ interface MetricsOverviewProps {
   cycleTime: MetricData;
   throughput: MetricData;
   aging: MetricData;
-  onCardClick: (metric: string) => void;
+  onCardClick: (metric: ModalType) => void;
 }
 
 export const MetricsOverview = ({
@@ -18,33 +18,37 @@ export const MetricsOverview = ({
   onCardClick,
 }: MetricsOverviewProps) => {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <MetricCard
         title="Lead Time"
         value={leadTime.value}
         unit={leadTime.unit}
-        icon={<Clock className="h-5 w-5" />}
+        trend={leadTime.trend}
+        description="Média total"
         onClick={() => onCardClick('leadTime')}
       />
       <MetricCard
         title="Cycle Time"
         value={cycleTime.value}
         unit={cycleTime.unit}
-        icon={<Zap className="h-5 w-5" />}
+        trend={cycleTime.trend}
+        description="Média desenvolvimento"
         onClick={() => onCardClick('cycleTime')}
       />
       <MetricCard
         title="Throughput"
         value={throughput.value}
         unit={throughput.unit}
-        icon={<TrendingUp className="h-5 w-5" />}
+        trend={throughput.trend}
+        description="Itens entregues"
         onClick={() => onCardClick('throughput')}
       />
       <MetricCard
         title="Aging"
         value={aging.value}
         unit={aging.unit}
-        icon={<AlertCircle className="h-5 w-5" />}
+        trend={aging.trend}
+        description="Em andamento"
         onClick={() => onCardClick('aging')}
       />
     </div>
