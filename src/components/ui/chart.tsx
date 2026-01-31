@@ -21,7 +21,10 @@ const useChart = () => {
 
 export const ChartContainer = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentProps<"div"> & { config: ChartConfig; children: React.ReactNode }
+  React.ComponentProps<"div"> & { 
+    config: ChartConfig; 
+    children: React.ReactElement 
+  }
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId()
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
@@ -45,31 +48,24 @@ export const ChartContainer = React.forwardRef<
 ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const styles = Object.entries(THEMES).map(([theme, prefix]) => {
+  const styles = React.useMemo(() => Object.entries(THEMES).map(([theme, prefix]) => {
     const vars = Object.entries(config)
       .map(([key, item]) => {
         const color = item.theme?.[theme as keyof typeof THEMES] || item.color
         return color ? `--color-${key}: ${color};` : ""
       }).join("")
     return `${prefix} [data-chart=${id}] { ${vars} }`
-  }).join("\n")
+  }).join("\n"), [id, config])
   
   return <style dangerouslySetInnerHTML={{ __html: styles }} />
-}
-
-interface PayloadItem {
-  dataKey?: string | number
-  name?: string
-  value?: number | string | (number | string)[]
-  color?: string
-  payload?: Record<string, unknown>
 }
 
 export const ChartTooltipContent = React.forwardRef<
   HTMLDivElement, 
   React.ComponentProps<typeof RechartsPrimitive.Tooltip> & { 
     hideLabel?: boolean; 
-    indicator?: "dot" | "line" 
+    indicator?: "dot" | "line";
+    className?: string 
   }
 >(({ active, payload, className, indicator = "dot", hideLabel, label, labelFormatter }, ref) => {
   const { config } = useChart()
@@ -78,7 +74,7 @@ export const ChartTooltipContent = React.forwardRef<
   return (
     <div 
       ref={ref} 
-      className={cn("grid gap-1.5 rounded-lg border bg-background p-2.5 shadow-xl", className as string)}
+      className={cn("grid gap-1.5 rounded-lg border bg-background p-2.5 shadow-xl", className)}
     >
       {!hideLabel && (
         <div className="font-medium">
@@ -86,7 +82,7 @@ export const ChartTooltipContent = React.forwardRef<
         </div>
       )}
       <div className="grid gap-1.5">
-        {payload.map((item: PayloadItem, i: number) => {
+        {payload.map((item, i) => {
           const key = item.dataKey ? String(item.dataKey) : ""
           const configItem = config[key] || config[item.name || ""]
           
