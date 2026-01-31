@@ -1,53 +1,118 @@
-# Welcome to your Lovable project
+# DevSight - Dev Metrics Dashboard
 
-## Project info
+Dashboard para visualização de métricas de desenvolvimento, incluindo Lead Time, Cycle Time, Throughput e Aging.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Configuração
 
-## How can I edit this code?
+O projeto está totalmente configurado e pronto para uso. Todas as dependências foram instaladas e os arquivos foram ajustados.
 
-There are several ways of editing your application.
+### Requisitos
 
-**Use Lovable**
+- Node.js v24.11.1 ou superior
+- npm v11.6.2 ou superior
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Instalação
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Scripts Disponíveis
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Desenvolvimento
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Inicia o servidor de desenvolvimento com HMR em `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build
 
-**Use GitHub Codespaces**
+```sh
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
+Cria uma versão otimizada para produção na pasta `dist/`
+
+### Build Development
+
+```sh
+npm run build:dev
+```
+
+Cria uma versão para desenvolvimento
+
+### Preview
+
+```sh
+npm run preview
+```
+
+Visualiza a versão compilada localmente
+
+### Lint
+
+```sh
+npm run lint
+```
+
+Verifica qualidade do código com ESLint
+
+### Testes
+
+```sh
+npm run test
+```
+
+Executa testes unitários com Vitest
+
+```sh
+npm run test:watch
+```
+
+Executa testes em modo watch
+
+## Stack Tecnológico
+
+- **React** 18.3.1 - Biblioteca UI
+- **TypeScript** 5.8.3 - Tipagem estática
+- **Vite** 5.4.19 - Build tool e dev server
+- **Tailwind CSS** 3.4.17 - Estilização
+- **shadcn/ui** - Componentes UI customizáveis
+- **React Router** 6.30.1 - Roteamento
+- **React Query** 5.83.0 - Gerenciamento de estado assíncrono
+- **Recharts** 2.15.4 - Gráficos
+- **Vitest** 3.2.4 - Testes unitários
+
+## Estrutura do Projeto
+
+```
+src/
+├── components/       # Componentes reutilizáveis
+│   ├── business/     # Componentes de negócio
+│   ├── charts/       # Componentes de gráficos
+│   ├── data/         # Componentes de dados
+│   ├── filters/      # Componentes de filtros
+│   ├── layout/       # Componentes de layout
+│   ├── metrics/      # Componentes de métricas
+│   ├── modals/       # Componentes modais
+│   └── ui/           # Componentes UI da shadcn
+├── contexts/         # Contextos React
+├── data/             # Dados mock
+├── hooks/            # Hooks customizados
+├── lib/              # Utilitários
+├── pages/            # Páginas
+├── types/            # Tipos TypeScript
+└── test/             # Testes
+```
+
+## Status da Aplicação
+
+✅ Build: Funcionando  
+✅ Testes: Passando  
+✅ Lint: Sem erros críticos (8 warnings baixa prioridade)  
+✅ Dependências: Todas instaladas
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
 ## What technologies are used for this project?
