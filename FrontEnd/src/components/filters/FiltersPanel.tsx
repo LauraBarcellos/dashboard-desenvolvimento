@@ -19,8 +19,8 @@ import { ptBR } from 'date-fns/locale';
 
 interface FiltersPanelProps {
   filters: Filters;
-  projects: string[];
-  types: string[];
+  projects?: string[];
+  types?: string[];
   onFilterChange: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
   onClear: () => void;
 }
@@ -40,13 +40,13 @@ const typeLabels: Record<string, string> = {
 };
 
 export const FiltersPanel = ({
-  filters,
-  projects,
-  types,
+  filters = { startDate: null, endDate: null, project: null, type: null, status: null },
+  projects = [],
+  types = [],
   onFilterChange,
   onClear,
 }: FiltersPanelProps) => {
-  const hasActiveFilters = Object.values(filters).some((v) => v !== null);
+  const hasActiveFilters = Object.values(filters || {}).some((v) => v !== null);
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -54,9 +54,7 @@ export const FiltersPanel = ({
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="h-9">
             <Calendar className="mr-2 h-4 w-4" />
-            {filters.startDate
-              ? format(filters.startDate, 'dd/MM/yyyy', { locale: ptBR })
-              : 'Data início'}
+            {filters.startDate ? format(filters.startDate, 'dd/MM/yyyy', { locale: ptBR }) : 'Data início'}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -73,9 +71,7 @@ export const FiltersPanel = ({
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="h-9">
             <Calendar className="mr-2 h-4 w-4" />
-            {filters.endDate
-              ? format(filters.endDate, 'dd/MM/yyyy', { locale: ptBR })
-              : 'Data fim'}
+            {filters.endDate ? format(filters.endDate, 'dd/MM/yyyy', { locale: ptBR }) : 'Data fim'}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -88,58 +84,30 @@ export const FiltersPanel = ({
         </PopoverContent>
       </Popover>
 
-      <Select
-        value={filters.project || ''}
-        onValueChange={(value) => onFilterChange('project', value || null)}
-      >
-        <SelectTrigger className="h-9 w-[160px]">
-          <SelectValue placeholder="Projeto" />
-        </SelectTrigger>
+      <Select value={filters.project || ''} onValueChange={(v) => onFilterChange('project', v || null)}>
+        <SelectTrigger className="h-9 w-[160px]"><SelectValue placeholder="Projeto" /></SelectTrigger>
         <SelectContent>
-          {projects.map((project) => (
-            <SelectItem key={project} value={project}>
-              {project}
-            </SelectItem>
-          ))}
+          {(projects || []).map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
         </SelectContent>
       </Select>
 
-      <Select
-        value={filters.type || ''}
-        onValueChange={(value) => onFilterChange('type', value || null)}
-      >
-        <SelectTrigger className="h-9 w-[140px]">
-          <SelectValue placeholder="Tipo" />
-        </SelectTrigger>
+      <Select value={filters.type || ''} onValueChange={(v) => onFilterChange('type', v || null)}>
+        <SelectTrigger className="h-9 w-[140px]"><SelectValue placeholder="Tipo" /></SelectTrigger>
         <SelectContent>
-          {types.map((type) => (
-            <SelectItem key={type} value={type}>
-              {typeLabels[type] || type}
-            </SelectItem>
-          ))}
+          {(types || []).map((t) => <SelectItem key={t} value={t}>{typeLabels[t] || t}</SelectItem>)}
         </SelectContent>
       </Select>
 
-      <Select
-        value={filters.status || ''}
-        onValueChange={(value) => onFilterChange('status', value || null)}
-      >
-        <SelectTrigger className="h-9 w-[140px]">
-          <SelectValue placeholder="Status" />
-        </SelectTrigger>
+      <Select value={filters.status || ''} onValueChange={(v) => onFilterChange('status', v || null)}>
+        <SelectTrigger className="h-9 w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
         <SelectContent>
-          {statusOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          {statusOptions.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
         </SelectContent>
       </Select>
 
       {hasActiveFilters && (
         <Button variant="ghost" size="sm" onClick={onClear} className="h-9">
-          <X className="mr-1 h-4 w-4" />
-          Limpar
+          <X className="mr-1 h-4 w-4" /> Limpar
         </Button>
       )}
     </div>

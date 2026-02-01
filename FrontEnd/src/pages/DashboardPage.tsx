@@ -32,11 +32,12 @@ export const DashboardPage = () => {
     return metrics[activeModal]?.items ?? [];
   }, [activeModal, metrics]);
 
+  // Trava de segurança para carregamento
   if (isLoading || !metrics) {
     return (
       <DashboardLayout>
         <div className="flex h-[80vh] items-center justify-center font-mono text-sm">
-          Carregando métricas...
+          Carregando métricas do banco de dados...
         </div>
       </DashboardLayout>
     );
@@ -49,8 +50,10 @@ export const DashboardPage = () => {
           <h2 className="text-2xl font-bold tracking-tight">Visão Geral</h2>
           <FiltersPanel
             filters={filters}
-            projects={metrics.projects}
-            types={metrics.types}
+            // GARANTIA: Se o back-end não enviou a lista de projetos/tipos, 
+            // passamos um array vazio para evitar o erro de .map()
+            projects={metrics.projects ?? []}
+            types={metrics.types ?? []}
             onFilterChange={updateFilter}
             onClear={clearFilters}
           />
@@ -66,9 +69,10 @@ export const DashboardPage = () => {
           />
 
           <ChartsSection
-            throughputTrend={metrics.throughputTrend}
-            cycleTimeTrend={metrics.cycleTimeTrend}
-            distributionByType={metrics.distributionByType}
+            // GARANTIA: Passamos arrays vazios se as tendências ainda não existirem
+            throughputTrend={metrics.throughputTrend ?? []}
+            cycleTimeTrend={metrics.cycleTimeTrend ?? []}
+            distributionByType={metrics.distributionByType ?? []}
           />
         </main>
       </div>

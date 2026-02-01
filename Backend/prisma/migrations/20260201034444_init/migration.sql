@@ -1,14 +1,15 @@
 -- CreateTable
 CREATE TABLE "WorkItem" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "externalId" TEXT NOT NULL,
+    "externalId" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "project" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "state" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL,
+    "activatedAt" DATETIME,
     "resolvedAt" DATETIME,
-    "finishedAt" DATETIME
+    "closedAt" DATETIME,
+    "importedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateIndex

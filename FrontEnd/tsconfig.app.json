@@ -24,8 +24,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["FrontEnd/src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["FrontEnd/src"]
 }
