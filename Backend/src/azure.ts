@@ -6,9 +6,33 @@ const prisma = new PrismaClient();
 const ORG = "deviobr";
 const PAT = process.env.AZURE_PAT!;
 
-export async function fetchAllWorkItems() {
+interface WorkItemReference {
+  id: number;
+  url: string;
+}
+
+interface WorkItemFields {
+  "System.Title": string;
+  "System.State": string;
+  "System.WorkItemType": string;
+  "System.TeamProject": string;
+  "System.CreatedDate": string;
+  "Microsoft.VSTS.Common.ActivatedDate"?: string;
+  "Microsoft.VSTS.Common.ClosedDate"?: string;
+}
+
+interface WorkItemDetail {
+  id: number;
+  fields: WorkItemFields;
+}
+
+interface WiqlResponse {
+  workItems: WorkItemReference[];
+}
+
+export async function fetchAllWorkItems(): Promise<WiqlResponse> {
   const response = await fetch(
-    `https://dev.azure.com/${ORG}/_apis/wit/wiql?api-version=6.0`,
+    `https://dev.azure.com/deviobr/_apis/wit/wiql?api-version=6.0`,
     {
       method: "POST",
       headers: {
@@ -28,7 +52,6 @@ export async function fetchAllWorkItems() {
             [System.TeamProject],
             [System.CreatedDate],
             [Microsoft.VSTS.Common.ActivatedDate],
-            [Microsoft.VSTS.Common.ResolvedDate],
             [Microsoft.VSTS.Common.ClosedDate]
           FROM workitems
           WHERE
@@ -53,9 +76,11 @@ export async function fetchAllWorkItems() {
   return response.json();
 }
 
-export async function fetchWorkItemDetails(ids: number[]) {
+export async function fetchWorkItemDetails(
+  ids: number[]
+): Promise<WorkItemDetail[]> {
   const batches: number[][] = [];
-  const results: any[] = [];
+  const results: WorkItemDetail[] = [];
 
   while (ids.length) {
     batches.push(ids.splice(0, 200));
@@ -76,14 +101,16 @@ export async function fetchWorkItemDetails(ids: number[]) {
       }
     );
 
-    const data = await response.json();
+    const data: { value: WorkItemDetail[] } = await response.json();
     results.push(...data.value);
   }
 
   return results;
 }
 
-export async function saveWorkItems(items: any[]) {
+export async function saveWorkItems(
+  items: WorkItemDetail[]
+): Promise<void> {
   for (const item of items) {
     const f = item.fields;
 

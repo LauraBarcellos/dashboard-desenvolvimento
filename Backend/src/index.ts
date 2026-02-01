@@ -1,4 +1,5 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import cors from "cors";
 import {
   fetchAllWorkItems,
   fetchWorkItemDetails,
@@ -7,32 +8,28 @@ import {
 
 const app = express();
 
-app.get("/", (_req, res) => {
-  res.send("Backend funcionando 🚀");
+app.use(cors());
+
+app.get("/", (_req: Request, res: Response) => {
+  res.send("Backend rodando");
 });
 
-app.get("/test", async (_req, res) => {
+app.get("/api", (_req: Request, res: Response) => {
+  res.send("Backend conectado");
+});
+
+app.get("/test", async (_req: Request, res: Response) => {
   try {
     const wiql = await fetchAllWorkItems();
-
-    const ids = wiql.workItems.map((w: any) => w.id);
-
+    const ids = wiql.workItems.map((w) => w.id);
     const details = await fetchWorkItemDetails(ids);
 
     await saveWorkItems(details);
 
-    res.json({
-      saved: details.length,
-    });
-  } catch (err: any) {
-    console.error(err);
-    res.status(500).json({
-      error: "Erro ao buscar ou salvar dados",
-      details: err.message,
-    });
+    res.json({ saved: details.length });
+  } catch {
+    res.status(500).json({ error: "Erro ao processar dados" });
   }
 });
 
-app.listen(3001, "0.0.0.0", () => {
-  console.log("Backend rodando em http://0.0.0.0:3001");
-});
+app.listen(3001, "0.0.0.0");
