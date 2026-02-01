@@ -3,8 +3,6 @@ import tailwindAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  // MELHORIA 1: Removidos caminhos inexistentes (pages, app). 
-  // Em projetos Vite, tudo fica na src. Isso acelera o build e o HMR.
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -82,6 +80,5 @@ export default {
       },
     },
   },
-  // MELHORIA 2: Importar o plugin como módulo (mais seguro para tipagem)
   plugins: [tailwindAnimate],
 } satisfies Config;

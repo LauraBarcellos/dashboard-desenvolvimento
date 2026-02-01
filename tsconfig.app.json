@@ -7,7 +7,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
@@ -15,14 +14,13 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting e Segurança (Melhorados) */
-    "strict": true,                     // Ativa todas as verificações de tipo estritas
-    "noUnusedLocals": true,            // Erro se houver variáveis locais não usadas
-    "noUnusedParameters": true,        // Erro se houver parâmetros de função não usados
-    "noImplicitAny": true,             // Impede o uso acidental de 'any'
-    "noImplicitReturns": true,         // Garante que todas as rotas de uma função retornem algo
-    "noFallthroughCasesInSwitch": true, // Evita erros em switch/case
-    "noUncheckedIndexedAccess": true,  // Segurança extra ao acessar arrays/objetos por índice
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
 
     "baseUrl": ".",
     "paths": {

@@ -13,7 +13,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Move todas as dependências de node_modules para um chunk separado chamado 'vendor'
           if (id.includes('node_modules')) {
             if (id.includes('recharts')) return 'vendor-charts';
             if (id.includes('lucide-react')) return 'vendor-icons';
@@ -22,7 +21,6 @@ export default defineConfig({
         },
       },
     },
-    // Aumenta o limite do aviso para 800kb para evitar alertas desnecessários em apps com gráficos
     chunkSizeWarningLimit: 800,
   },
 });
