@@ -1,5 +1,3 @@
-Aqui está um README.md profissional, focado em engenharia e qualidade, estruturado para refletir o rigor técnico que aplicamos ao código.
-
 DevSight Metrics
 Plataforma de análise de métricas de fluxo para times de engenharia, focada em visibilidade de performance (Lead Time, Cycle Time, Throughput) e saúde do projeto.
 
@@ -12,7 +10,7 @@ UI & Componentes: Tailwind CSS, Shadcn/UI, Lucide React
 
 Gráficos: Recharts (Customizado para acessibilidade e performance)
 
-Qualidade: ESLint, Prettier, JSCPD (Detecção de duplicação)
+Qualidade: ESLint, Prettier, JSCPD 
 
 📊 Principais Métricas
 O sistema calcula e visualiza automaticamente os seguintes KPIs de fluxo:
