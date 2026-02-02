@@ -10,7 +10,7 @@ UI & Componentes: Tailwind CSS, Shadcn/UI, Lucide React
 
 Gráficos: Recharts (Customizado para acessibilidade e performance)
 
-Qualidade: ESLint, Prettier, JSCPD (Detecção de duplicação)
+Qualidade: ESLint, Prettier, JSCPD 
 
 📊 Principais Métricas
 O sistema calcula e visualiza automaticamente os seguintes KPIs de fluxo:
