@@ -1,5 +1,3 @@
-Aqui está um README.md profissional, focado em engenharia e qualidade, estruturado para refletir o rigor técnico que aplicamos ao código.
-
 DevSight Metrics
 Plataforma de análise de métricas de fluxo para times de engenharia, focada em visibilidade de performance (Lead Time, Cycle Time, Throughput) e saúde do projeto.
 
